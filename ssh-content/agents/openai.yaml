@@ -1,0 +1,4 @@
+interface:
+  display_name: "SSH Connector"
+  short_description: "Fast, secure SSH connections and remote checks"
+  default_prompt: "Use $ssh-content to connect to a remote server and run the requested checks securely."

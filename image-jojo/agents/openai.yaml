@@ -1,0 +1,4 @@
+interface:
+  display_name: "image jojo"
+  short_description: "Generate images with the JOJO Code OpenAI-compatible API."
+  default_prompt: "Use $image-jojo to generate an image from a prompt, size, and output filename."

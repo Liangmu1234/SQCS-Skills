@@ -1,0 +1,84 @@
+{
+  "meta": {
+    "title": "AI Visual PPT Composer Sample",
+    "author": "Codex",
+    "slideSize": { "width": 13.333, "height": 7.5, "previewWidth": 1920, "previewHeight": 1080 },
+    "theme": {
+      "fontFace": "Microsoft YaHei",
+      "titleFontFace": "Microsoft YaHei",
+      "color": "FFFFFF",
+      "backgroundColor": "0B1020"
+    }
+  },
+  "slides": [
+    {
+      "id": "cover",
+      "title": "封面",
+      "background_prompt": "16:9 premium technology presentation background, deep navy and electric blue, abstract light particles, clean empty left area for title, no readable text, no letters, no numbers, no logo, no watermark.",
+      "background": { "color": "0B1020" },
+      "elements": [
+        {
+          "type": "shape",
+          "name": "soft_glow_panel",
+          "x": 0.55,
+          "y": 0.78,
+          "w": 5.7,
+          "h": 5.6,
+          "fill": { "color": "14213D", "transparency": 12 },
+          "line": { "color": "4DA3FF", "transparency": 75 },
+          "radius": 0.18
+        },
+        {
+          "type": "text",
+          "name": "main_title",
+          "text": "AI视觉底图\n精准排版\n可编辑PPT重建",
+          "x": 0.82,
+          "y": 1.18,
+          "w": 5.25,
+          "h": 1.9,
+          "fontSize": 34,
+          "fontFace": "Microsoft YaHei",
+          "bold": true,
+          "color": "FFFFFF",
+          "breakLine": false,
+          "fit": "shrink"
+        },
+        {
+          "type": "text",
+          "name": "subtitle",
+          "text": "Image 2 负责高级氛围，HTML/CSS/SVG 负责精准结构，PPTXGenJS 负责原生可编辑输出",
+          "x": 0.86,
+          "y": 3.48,
+          "w": 4.95,
+          "h": 0.72,
+          "fontSize": 14,
+          "fontFace": "Microsoft YaHei",
+          "color": "C8D7FF",
+          "fit": "shrink"
+        },
+        {
+          "type": "line",
+          "name": "accent_line",
+          "x": 0.86,
+          "y": 4.55,
+          "w": 2.15,
+          "h": 0,
+          "line": { "color": "4DA3FF", "width": 2 }
+        },
+        {
+          "type": "text",
+          "name": "page_num",
+          "text": "01",
+          "x": 11.85,
+          "y": 6.73,
+          "w": 0.8,
+          "h": 0.25,
+          "fontSize": 10,
+          "color": "8EA7D8",
+          "align": "right"
+        }
+      ],
+      "notes": "Sample cover slide. Replace background.color with background.image once a no-text AI background is generated."
+    }
+  ]
+}

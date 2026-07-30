@@ -1,0 +1,92 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "AI Visual PPT Composer Deck Schema",
+  "type": "object",
+  "required": ["meta", "slides"],
+  "properties": {
+    "meta": {
+      "type": "object",
+      "required": ["title"],
+      "properties": {
+        "title": { "type": "string" },
+        "author": { "type": "string" },
+        "slideSize": {
+          "type": "object",
+          "properties": {
+            "width": { "type": "number", "default": 13.333 },
+            "height": { "type": "number", "default": 7.5 },
+            "previewWidth": { "type": "integer", "default": 1920 },
+            "previewHeight": { "type": "integer", "default": 1080 }
+          }
+        },
+        "theme": {
+          "type": "object",
+          "properties": {
+            "fontFace": { "type": "string", "default": "Microsoft YaHei" },
+            "titleFontFace": { "type": "string", "default": "Microsoft YaHei" },
+            "color": { "type": "string", "default": "FFFFFF" },
+            "backgroundColor": { "type": "string", "default": "0B1020" }
+          }
+        }
+      }
+    },
+    "slides": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "elements"],
+        "properties": {
+          "id": { "type": "string" },
+          "title": { "type": "string" },
+          "background_prompt": { "type": "string" },
+          "background": {
+            "type": "object",
+            "properties": {
+              "color": { "type": "string" },
+              "image": { "type": "string" },
+              "opacity": { "type": "number" }
+            }
+          },
+          "elements": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": ["type", "x", "y", "w", "h"],
+              "properties": {
+                "type": { "enum": ["text", "shape", "image", "svg", "line", "table", "chart"] },
+                "name": { "type": "string" },
+                "text": { "type": "string" },
+                "path": { "type": "string" },
+                "svg": { "type": "string" },
+                "x": { "type": "number" },
+                "y": { "type": "number" },
+                "w": { "type": "number" },
+                "h": { "type": "number" },
+                "rotate": { "type": "number" },
+                "fontFace": { "type": "string" },
+                "fontSize": { "type": "number" },
+                "bold": { "type": "boolean" },
+                "italic": { "type": "boolean" },
+                "color": { "type": "string" },
+                "fill": { "type": "object" },
+                "line": { "type": "object" },
+                "align": { "enum": ["left", "center", "right", "justify"] },
+                "valign": { "enum": ["top", "mid", "bottom"] },
+                "margin": { "type": "number" },
+                "radius": { "type": "number" },
+                "opacity": { "type": "number" },
+                "shadow": { "type": "object" },
+                "glow": { "type": "object" },
+                "rows": { "type": "array" },
+                "data": { "type": "array" },
+                "chartType": { "type": "string" },
+                "options": { "type": "object" }
+              }
+            }
+          },
+          "notes": { "type": "string" }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,4 @@
+interface:
+  display_name: "Model Interface"
+  short_description: "Serve standard model endpoints"
+  default_prompt: "Use $model-interface to connect to the server, start a model inference service, validate it, and return the OpenAI-compatible endpoint."

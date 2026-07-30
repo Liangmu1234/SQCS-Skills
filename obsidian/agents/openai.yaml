@@ -1,0 +1,4 @@
+interface:
+  display_name: "Obsidian"
+  short_description: "Read and search your local Obsidian vault."
+  default_prompt: "Use $obsidian to find relevant notes from my Obsidian vault."

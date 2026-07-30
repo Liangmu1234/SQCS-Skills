@@ -1,0 +1,17 @@
+{
+  "deck_type": "premium editable PPT",
+  "mood": "high-end, precise, cinematic, readable",
+  "default_ratio": "16:9",
+  "layering": {
+    "background": "raster no-text visual atmosphere",
+    "text": "native editable PPT text",
+    "shapes": "native PPT or SVG vector elements",
+    "diagrams": "native PPT shapes whenever practical"
+  },
+  "rules": [
+    "All meaningful text must be native editable PPT text.",
+    "AI backgrounds must contain no readable text, letters, numbers, fake UI labels, logos, or watermark.",
+    "Use HTML/CSS/SVG only as a preview and layout planning layer; final output should be rebuilt as PPT elements.",
+    "Do not mechanically apply the same template to every slide; maintain style consistency with compositional variation."
+  ]
+}

@@ -1,0 +1,7 @@
+interface:
+  display_name: "PPT Gen"
+  short_description: "Image-to-editable PPTX workflow with generated visual assets."
+  default_prompt: "Use $ppt-gen to turn this reference image into a polished editable PPTX matching the final tech-report style, using built-in Image Gen first and image-jojo only as fallback for visual assets."
+
+policy:
+  allow_implicit_invocation: true
