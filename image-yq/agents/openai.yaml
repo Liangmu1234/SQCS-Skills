@@ -1,4 +1,0 @@
-interface:
-  display_name: "Image YQ"
-  short_description: "Generate PNG images through the YQ OpenAI-compatible image API."
-  default_prompt: "Use $image-yq to generate a PNG image from this prompt."
