@@ -1,6 +1,0 @@
-"""Shared SQCS agent settings."""
-
-SHARED_TOKEN = "0123456789abcdef0123456789abcdef"
-AGENT_PORT = 8766
-API_PORT = 8767
-API_HOST = "127.0.0.1"
