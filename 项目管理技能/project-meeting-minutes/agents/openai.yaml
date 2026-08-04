@@ -1,0 +1,4 @@
+interface:
+  display_name: "项目会议纪要生成"
+  short_description: "根据会议转写和Excel模板生成项目纪要并自动归档到标准项目目录"
+  default_prompt: "使用 $project-meeting-minutes 根据会议转写生成项目会议纪要并归档。"
