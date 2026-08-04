@@ -1,6 +1,6 @@
 # SQCS-Skills
 
-面向 Codex 的实用技能集合，覆盖远程服务器运维、模型推理服务、Obsidian 知识库检索，以及从 HTML 演示文稿到高保真可编辑 PPTX 的多种制作流程。
+面向 Codex 的实用技能集合，覆盖远程服务器运维、模型推理服务、Obsidian 知识库检索、项目会议纪要归档，以及从 HTML 演示文稿到高保真可编辑 PPTX 的多种制作流程。
 
 > 每个一级技能目录均可独立使用。将其放入 Codex Skills 目录后，Codex 会根据任务描述自动匹配相应工作流。
 
@@ -11,6 +11,7 @@
 | 服务器 | `ssh-content` | 从 Windows 通过 SSH 连接、巡检和诊断远程 Linux 服务器，支持凭据注册表与安全的临时密码传递。 |
 | 服务器 | `model-interface` | 发现本地模型、启动并验证 OpenAI 兼容的 vLLM 推理服务。 |
 | 知识库 | `obsidian` | 检索、读取、汇总本地 Obsidian Vault 中的 Markdown 笔记、标签和 Frontmatter。 |
+| 项目管理 | `project-meeting-minutes` | 将会议转写整理为结构化 Excel 纪要，匹配或创建标准项目目录并完成归档。 |
 | PPT | `ppt-gen` | 根据单页参考图生成高质量、可编辑的企业风格 PPTX。 |
 | PPT | `image-to-editable-ppt` | 将截图、海报、图表或 UI 重建为可编辑的单页 PowerPoint。 |
 | PPT | `image-svg-pptx-pro` | 通过“图片 -> SVG -> PPTX”流程，高保真重建复杂页面、报告图和幻灯片。 |
@@ -25,6 +26,8 @@ SQCS-Skills/
 │   ├── ssh-content/
 │   └── model-interface/
 ├── obsidian笔记技能/
+├── 项目管理技能/
+│   └── project-meeting-minutes/
 ├── PPT技能/
 │   ├── ai-visual-ppt-composer/
 │   ├── html-ppt-skill-main/
@@ -58,6 +61,7 @@ $skillsDir = "$env:USERPROFILE\.codex\skills"
 Copy-Item ".\服务器技能\ssh-content" $skillsDir -Recurse
 Copy-Item ".\服务器技能\model-interface" $skillsDir -Recurse
 Copy-Item ".\obsidian笔记技能" "$skillsDir\obsidian" -Recurse
+Copy-Item ".\项目管理技能\project-meeting-minutes" $skillsDir -Recurse
 ```
 
 PPT 技能可按需复制并使用清晰的目录名：
@@ -125,6 +129,26 @@ python ".\scripts\obsidian_cli.py" read "01-笔记/example.md"
 ```
 
 > 使用前请检查 `SKILL.md` 中配置的 Vault 路径是否与本机一致；如不一致，请按团队规范调整后再分发。
+
+## 项目管理技能
+
+### `project-meeting-minutes`
+
+用于将会议转写或语音识别记录整理为结构化项目会议纪要，并将最终 Excel 副本归档到对应项目的 `8.其他` 目录。
+
+- 从转写中提取项目、客户、日期、参会人、测试范围、结论、责任人、风险和遗留事项；无法确认的信息标记为“待确认”或按模板约束留空。
+- 优先使用用户提供的 Excel 模板；未提供时，从 `Meeting-Minutes-Template` 仓库同步受控缓存并按会议主题选择模板。
+- 在项目信息目录中进行高置信项目匹配；项目不存在时，从完整标准项目模板复制并创建对应年度、季度和序号目录。
+- 始终先复制模板再填写，保留字段标题、公式、数据验证、预置选项和原有样式，不修改模板原件。
+- 对最终 XLSX 执行路径、关键字段、数据验证、公式、版式和源模板哈希检查。
+
+项目目录定位、模板同步和副本创建优先使用附带脚本：
+
+```powershell
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File ".\scripts\prepare_project_minutes.ps1" -MinutesTemplateName "异构服务器.xlsx" ...
+```
+
+> 该技能包含本机项目根目录和受控缓存约定。分发到其他环境前，请先检查 `SKILL.md` 中的固定路径、模板仓库与目录规范。
 
 ## PPT 技能
 
@@ -200,6 +224,7 @@ node scripts/avpc_build.mjs deck.json output
 | SSH 运维 | Windows、OpenSSH 客户端、可访问的远程主机，以及可选的服务器注册表。 |
 | 模型服务 | Linux 服务器、NVIDIA GPU、CUDA、Python、PyTorch，以及通常为 vLLM 的推理后端。 |
 | Obsidian 检索 | Python 3 和可读取的本地 Obsidian Vault。 |
+| 项目会议纪要 | Windows PowerShell、Git、Excel `.xlsx` 模板，以及 Codex 的 Spreadsheets 技能和工作区依赖。 |
 | PPTX 重建 | Python 3；部分流程还需要 PowerPoint、Node.js、PPTXGenJS 或 Codex bundled runtime。 |
 | HTML PPT | 现代浏览器；导出 PNG 时需要可被渲染脚本调用的 Chrome/Chromium。 |
 
@@ -211,6 +236,7 @@ node scripts/avpc_build.mjs deck.json output
 - 使用 `ssh-content` 时，优先执行只读检查；涉及服务、软件包、网络、账号或重启的修改，应在得到明确授权后执行。
 - 使用 `model-interface` 启动服务前，确认端口占用、GPU 资源和现有进程，避免中断其他模型服务。
 - 使用 Obsidian 技能前确认 Vault 根目录，避免在不受控目录中搜索和读取文件。
+- 生成项目会议纪要时，不修改模板原件、模板缓存或现有项目目录；项目名称或匹配结果不明确时必须先确认，并妥善保护转写中的客户与项目信息。
 - 生成或重建 PPT 时，注意源图片、演讲稿、数据和 Logo 的授权与保密要求。
 
 ## 贡献
