@@ -1,6 +1,6 @@
 # SQCS-Skills
 
-面向 Codex 的实用技能集合，覆盖远程服务器运维、模型推理服务、Obsidian 知识库检索、项目会议纪要归档，以及从 HTML 演示文稿到高保真可编辑 PPTX 的多种制作流程。
+面向 Codex 的实用技能集合，覆盖远程服务器运维、BMC/IPMI 与 Redfish 管理、模型推理服务、Obsidian 知识库检索、项目会议纪要归档，以及从 HTML 演示文稿到高保真可编辑 PPTX 的多种制作流程。
 
 > 每个一级技能目录均可独立使用。将其放入 Codex Skills 目录后，Codex 会根据任务描述自动匹配相应工作流。
 
@@ -9,6 +9,8 @@
 | 分类 | 技能 | 适用场景 |
 | --- | --- | --- |
 | 服务器 | `ssh-content` | 从 Windows 通过 SSH 连接、巡检和诊断远程 Linux 服务器，支持凭据注册表与安全的临时密码传递。 |
+| 服务器 | `ipmitool` | 通过 IPMI/ipmitool 管理授权服务器 BMC，执行电源、传感器、SEL、FRU、SOL、账户、LAN 和 H3C HDM OEM 操作。 |
+| 服务器 | `redfish` | 通过 HTTPS/Redfish REST API 管理授权服务器 BMC，执行发现、电源、传感器、库存、虚拟介质、账户、固件和任务操作。 |
 | 服务器 | `model-interface` | 发现本地模型、启动并验证 OpenAI 兼容的 vLLM 推理服务。 |
 | 知识库 | `obsidian` | 检索、读取、汇总本地 Obsidian Vault 中的 Markdown 笔记、标签和 Frontmatter。 |
 | 项目管理 | `project-meeting-minutes` | 将会议转写整理为结构化 Excel 纪要，匹配或创建标准项目目录并完成归档。 |
@@ -24,6 +26,8 @@
 SQCS-Skills/
 ├── 服务器技能/
 │   ├── ssh-content/
+│   ├── ipmitool-skill/
+│   ├── redfish-skill/
 │   └── model-interface/
 ├── obsidian笔记技能/
 ├── 项目管理技能/
@@ -59,6 +63,8 @@ cd SQCS-Skills
 $skillsDir = "$env:USERPROFILE\.codex\skills"
 
 Copy-Item ".\服务器技能\ssh-content" $skillsDir -Recurse
+Copy-Item ".\服务器技能\ipmitool-skill" "$skillsDir\ipmitool" -Recurse
+Copy-Item ".\服务器技能\redfish-skill" "$skillsDir\redfish" -Recurse
 Copy-Item ".\服务器技能\model-interface" $skillsDir -Recurse
 Copy-Item ".\obsidian笔记技能" "$skillsDir\obsidian" -Recurse
 Copy-Item ".\项目管理技能\project-meeting-minutes" $skillsDir -Recurse
@@ -83,6 +89,27 @@ Copy-Item ".\PPT技能\ppt-gen" $skillsDir -Recurse
 ## 技能说明
 
 ### 服务器技能
+
+#### `ipmitool`
+
+用于在获得授权的前提下，通过 IPMI/ipmitool 管理物理服务器 BMC。
+
+- 支持电源状态与控制、传感器、SEL、FRU、SOL、用户、LAN 和常用 H3C HDM OEM 工作流。
+- 执行操作前先确认 BMC 地址、管理网络、IPMI 版本、支持的 cipher suite 和 H3C 平台/HDM 代际；不猜测通道、设备编号或 OEM raw 字节。
+- 默认优先使用 `lanplus`、受支持的非零 cipher suite 和只读检查；电源、重置、SEL、账户、网络、固件及 OEM 写操作必须逐项确认。
+- 密码通过受控密钥存储或不回显输入传递，不放入命令参数、脚本、日志或聊天记录；报告中脱敏凭据和敏感管理地址。
+- H3C G3/G5 HDM、G6 HDM2、G6/G7 HDM3 的命令和字段以对应 `references/` 手册为准。
+
+#### `redfish`
+
+用于在获得授权的前提下，通过 HTTPS/Redfish REST/JSON API 管理物理服务器 BMC。
+
+- 支持资源发现、电源、传感器与热管理、库存、虚拟介质、账户、配置、固件和异步任务。
+- 遵循 service root 和资源链接发现 `Systems`、`Managers`、`Chassis`、`Tasks` 等资源，不硬编码 `Systems/1` 或任务编号。
+- 默认校验证书并使用 HTTPS；不将 `verify=False`、`-k`、HTTP 或弱 TLS 降级作为默认方案。
+- 复用并清理 Redfish session；密码、Token、响应头、序列号、诊断归档和私有管理地址不得出现在日志或报告中。
+- 所有 `POST`、`PATCH`、`DELETE`、电源、账户、虚拟介质、配置、诊断和固件操作都必须在展示目标、请求体、影响与恢复方案后获得明确确认。
+- H3C HDM/HDM2/HDM3 的 URI、字段、权限、版本矩阵和完成码以对应 `references/` 手册为准。
 
 #### `ssh-content`
 
@@ -222,6 +249,8 @@ node scripts/avpc_build.mjs deck.json output
 | 场景 | 主要依赖 |
 | --- | --- |
 | SSH 运维 | Windows、OpenSSH 客户端、可访问的远程主机，以及可选的服务器注册表。 |
+| BMC/IPMI 运维 | 已授权的 BMC 管理网络、ipmitool（优先使用受信任的系统版本）以及目标设备支持的 IPMI/cipher suite；H3C OEM 操作还需要对应参考手册。 |
+| BMC/Redfish 运维 | 已授权的 BMC 管理网络、HTTPS、Python `requests` 或等效客户端，以及目标设备支持的 Redfish 资源；H3C OEM 操作还需要对应参考手册。 |
 | 模型服务 | Linux 服务器、NVIDIA GPU、CUDA、Python、PyTorch，以及通常为 vLLM 的推理后端。 |
 | Obsidian 检索 | Python 3 和可读取的本地 Obsidian Vault。 |
 | 项目会议纪要 | Windows PowerShell、Git、Excel `.xlsx` 模板，以及 Codex 的 Spreadsheets 技能和工作区依赖。 |
@@ -233,6 +262,10 @@ node scripts/avpc_build.mjs deck.json output
 ## 安全说明
 
 - 不要将服务器密码、API Key、内网地址或用户数据写入 `SKILL.md`、示例命令、Git 历史或公开 Issue。
+- 使用 `ipmitool` 或 Redfish 技能时，仅操作已授权的 BMC，并保持在隔离的管理网络或批准的跳板机上；不要将 IPMI/Redfish 暴露到公网。
+- 使用 `ipmitool` 时，优先 `lanplus` 和受支持的非零 cipher suite；不要使用 cipher suite 0，也不要猜测 H3C OEM raw 命令、通道或字节。
+- 使用 Redfish 时默认校验证书、复用并清理 session；不要在 URL、命令参数、日志或报告中传递或打印密码、Token 和响应头。
+- BMC 电源、重置、SEL、账户、网络、虚拟介质、固件、诊断和 OEM 写操作会影响物理服务器，必须在执行前明确目标、影响和恢复方案并获得确认。
 - 使用 `ssh-content` 时，优先执行只读检查；涉及服务、软件包、网络、账号或重启的修改，应在得到明确授权后执行。
 - 使用 `model-interface` 启动服务前，确认端口占用、GPU 资源和现有进程，避免中断其他模型服务。
 - 使用 Obsidian 技能前确认 Vault 根目录，避免在不受控目录中搜索和读取文件。
